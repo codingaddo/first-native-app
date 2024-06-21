@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  Share,
 } from "react-native";
 import React from "react";
 
@@ -38,8 +39,18 @@ const ActionButton = ({ business }) => {
   ];
 
   const OpenUrl = (item) => {
-    if (item.name === "Share" || item.name === "Web") {
+    if (item.name === "Web") {
       return;
+    }
+    if (item.name === "Share") {
+      Share.share({
+        message:
+          business?.name +
+          "\nAddress:" +
+          business?.address +
+          "\nPhone:" +
+          business?.contact,
+      });
     }
     Linking.openURL(item?.url);
   };

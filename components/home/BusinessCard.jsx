@@ -1,10 +1,13 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 
 const BusinessCard = ({ business }) => {
+  const router = useRouter();
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => router.push("/businessDetail/" + business.id)}
       style={{
         marginLeft: 20,
         padding: 10,
@@ -74,7 +77,7 @@ const BusinessCard = ({ business }) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

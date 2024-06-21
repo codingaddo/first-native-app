@@ -16,7 +16,7 @@ const BusinessList = () => {
     const snapShot = await getDocs(q);
     snapShot.forEach((doc) => {
       //   console.log(doc.data());
-      setbusinessList((pre) => [...pre, doc.data()]);
+      setbusinessList((pre) => [...pre, { id: doc.id, ...doc.data() }]);
     });
   };
   return (

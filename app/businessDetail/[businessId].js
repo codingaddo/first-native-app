@@ -6,6 +6,9 @@ import { db } from "@/config/FirebaseConfig";
 import Intro from "../../components/businessDetails/Intro";
 import ActionButton from "../../components/businessDetails/ActionButton";
 import About from "../../components/businessDetails/About";
+import Review from "../../components/businessDetails/Review";
+import { StatusBar } from "expo-status-bar";
+import { getBackgroundColorAsync } from "expo-system-ui";
 
 const BusinessDetai = () => {
   const { businessId } = useLocalSearchParams();
@@ -20,14 +23,15 @@ const BusinessDetai = () => {
     const document = await getDoc(docRef);
     if (document.exists()) {
       //   console.log(document.data());
-      setBusiness(document.data());
+      setBusiness({ id: document.id, ...document.data() });
       setLoading(false);
     } else {
       console.log("No doc found");
     }
   };
   return (
-    <View>
+    <ScrollView style={{ flexGrow: 1 }}>
+      {/* <StatusBar style={{ getBackgroundColorAsync }}></StatusBar> */}
       {loading ? (
         <ActivityIndicator
           size="large"
@@ -39,9 +43,10 @@ const BusinessDetai = () => {
           <Intro business={business} />
           <ActionButton business={business} />
           <About business={business} />
+          <Review business={business} />
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 

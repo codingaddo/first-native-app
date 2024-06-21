@@ -5,6 +5,8 @@ import { db } from "@/config/FirebaseConfig";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import BusinessListCard from "../../components/businessList/BusinessListCard";
+import { StatusBar } from "expo-status-bar";
+import { getBackgroundColorAsync } from "expo-system-ui";
 
 const BusinessListByCategory = () => {
   const navigation = useNavigation();
@@ -37,6 +39,7 @@ const BusinessListByCategory = () => {
   };
   return (
     <View>
+      {/* <StatusBar style={{ getBackgroundColorAsync }}></StatusBar> */}
       {businessList?.length > 0 && loading === false ? (
         <FlatList
           onRefresh={getBusinessList}
