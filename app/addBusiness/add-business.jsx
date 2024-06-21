@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
+import { getStorage, ref } from "firebase/storage";
 
 import { Colors } from "@/constants/Colors";
 import { collection, getDocs, query } from "firebase/firestore";
@@ -64,6 +65,8 @@ const AddBusiness = () => {
       ]);
     });
   };
+
+  const onsubmit = async () => {};
 
   return (
     <ScrollView style={{ padding: 20 }}>
