@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  ToastAndroid,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
@@ -13,18 +14,20 @@ import RNPickerSelect from "react-native-picker-select";
 import { getStorage, ref } from "firebase/storage";
 
 import { Colors } from "@/constants/Colors";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { db } from "@/config/FirebaseConfig";
 
 const AddBusiness = () => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
-  const [categoryList, setCategoryList] = useState("shopping");
+  const [categoryList, setCategoryList] = useState([]);
   const [name, setName] = useState("");
   const [address, setaddress] = useState("");
   const [contact, setcontact] = useState("");
   const [email, setemail] = useState("");
   const [about, setabout] = useState("");
+  const [category, setCategoty] = useState("shopping");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Add New Business",
@@ -61,12 +64,26 @@ const AddBusiness = () => {
         {
           label: doc.data().name,
           value: doc.data().name,
+          key: Date.now(),
         },
       ]);
     });
   };
 
-  const onsubmit = async () => {};
+  const onsubmit = async () => {
+    setLoading(true);
+    await setDoc(doc(db, "businessList", Date.now().toString()), {
+      name: name,
+      category: category,
+      address: address,
+      contact: contact,
+      email: email,
+      about: about,
+      // image: image,
+    });
+    setLoading(false);
+    ToastAndroid.show("New business added successfully", ToastAndroid.LONG);
+  };
 
   return (
     <ScrollView style={{ padding: 20 }}>
@@ -197,9 +214,12 @@ const AddBusiness = () => {
         {/* <RNPickerSelect
           onValueChange={(value) => setCategoryList(value)}
           items={categoryList}
+          itemKey={categoryList.key}
         /> */}
       </View>
       <TouchableOpacity
+        onPress={() => onsubmit()}
+        disabled={loading}
         style={{
           padding: 15,
           backgroundColor: Colors.primaryColor,
@@ -209,11 +229,19 @@ const AddBusiness = () => {
           marginVertical: 10,
         }}
       >
-        <Text
-          style={{ fontFamily: "outfit-medium", fontSize: 15, color: "white" }}
-        >
-          Add new Business
-        </Text>
+        {!loading ? (
+          <Text
+            style={{
+              fontFamily: "outfit-medium",
+              fontSize: 15,
+              color: "white",
+            }}
+          >
+            Add new Business
+          </Text>
+        ) : (
+          <Text>Adding business...</Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );
